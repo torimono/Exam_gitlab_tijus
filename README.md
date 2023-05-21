@@ -50,7 +50,7 @@
 
 
 ##Diagramme
-![ScreenShot](https://raw.github.com/baranbartu/microservices-with-fastapi/master/diagram.png)
+![ScreenShot](https://github.com/DataScientest/gitlab_devops_exams/blob/main/diagram.png)
 
 ##Documentation Page
 ![ScreenShot](https://raw.github.com/baranbartu/microservices-with-fastapi/master/docs.png)
