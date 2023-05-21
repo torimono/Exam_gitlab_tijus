@@ -1,7 +1,7 @@
 # PROJET GITLAB DATASCIENTEST
 
 
-# Microservices, API Gateway, Authentification avec FastAPI, E/S non bloquantes
+# Microservices, API Gateway, Authentification avec FastAPI
 
 - Ce référentiel est composé d'un ensemble de petits microservices prenant en compte l'approche de la passerelle API
 - Le nombre prévu de microservices était de deux, mais étant donné que les services
@@ -49,8 +49,8 @@
 - Des essais similaires peuvent également être effectués avec l'utilisateur par défaut pour créer et afficher les commandes
 
 
-## Overall Diagram
+##Diagramme
 ![ScreenShot](https://raw.github.com/baranbartu/microservices-with-fastapi/master/diagram.png)
 
-## Documentation Page
+##Documentation Page
 ![ScreenShot](https://raw.github.com/baranbartu/microservices-with-fastapi/master/docs.png)
