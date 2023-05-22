@@ -27,7 +27,7 @@
 - visitez l'adresse => http://localhost:8001/docs
 
 # Exemples de requêtes
-- Il y a déjà créé 2 utilisateurs dans la base de données des utilisateurs
+- Il existe déjà 2 utilisateurs dans la base de données des utilisateurs
 - obtenir un jeton api avec l'utilisateur administrateur
   ```
   curl --header "Content-Type: application/json" \
