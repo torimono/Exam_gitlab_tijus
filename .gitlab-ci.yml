@@ -16,16 +16,16 @@ image:
 
 test:
   stage: test
-  image: python:latest
+  image: python:3.9-slim-buster
   before_script:
-    # Show docker daemon info (optional, good for debugging)
-    # - sudo apt install python3-pip -y
-  script:
-    #- pip install -r requirements.txt  # il faut utiliser le test deja present dans le github # 
+    - apt-get update && apt-get install -y gcc libc-dev
+    - pip install --upgrade pip
     - cd users
     - pip install -r requirements.txt
+  script:
     - cd test
     - python3 -m unittest
+
 
 # Stage de Build
 build:
