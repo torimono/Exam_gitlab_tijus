@@ -6,19 +6,30 @@ stages:
   - deploy_staging
   - deploy_prod
 
+image:
+  name: "python:3.11-alpine"
+  entrypoint: ["/bin/sh", "-c"]
+
+  
 variables:
-  DOCKERHUB_REPO_PREFIX: "baranbartu"
+  DOCKERHUB_REPO_PREFIX: "tijusjason"
   IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
 
 # Stage de Test
 test:
   stage: test
-  image: docker:19.03.12
-  services:
-    - docker:19.03.12-dind
+  image: python:latest
+  before_script:
+    # Show docker daemon info (optional, good for debugging)
+    # - sudo apt install python3-pip -y
   script:
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/test-image:$IMAGE_TAG .
-    - docker run ${DOCKERHUB_REPO_PREFIX}/test-image:$IMAGE_TAG pytest
+    #- pip install -r requirements.txt
+    - sudo apt-get install -y python3-pip
+    - pip install fastapi
+    - pip install pytest
+    - pip install httpx
+    - cd app/
+    - python3 -m pytest
 
 # Stage de Build
 build:
@@ -27,9 +38,9 @@ build:
   services:
     - docker:19.03.12-dind
   script:
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG gateway/
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG users/
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG orders/
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG ./gateway/
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG ./users/
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG ./orders/
     - docker push ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG
     - docker push ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG
     - docker push ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG
