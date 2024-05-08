@@ -1,0 +1,32 @@
+gateway:
+  replicaCount: 1
+  image:
+    repository: baranbartu/k-api-gateway
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8001
+    targetPort: 8000
+
+users:
+  replicaCount: 1
+  image:
+    repository: baranbartu/k-users
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8002
+    targetPort: 8000
+
+orders:
+  replicaCount: 1
+  image:
+    repository: baranbartu/k-orders
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8003
+    targetPort: 8000

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-users
+spec:
+  type: {{ .Values.users.service.type }}
+  ports:
+  - port: {{ .Values.users.service.port }}
+    targetPort: {{ .Values.users.service.targetPort }}
+    protocol: TCP
+  selector:
+    app: users
