@@ -10,15 +10,22 @@ variables:
   DOCKERHUB_REPO_PREFIX: "tijusjason"
   IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
 
-# Stage de Test
+image:
+  name: "python:3.11-alpine"
+  entrypoint: ["/bin/sh", "-c"]
+
 test:
   stage: test
-  image: docker:19.03.12
-  services:
-    - docker:19.03.12-dind
+  image: python:latest
+  before_script:
+    # Show docker daemon info (optional, good for debugging)
+    # - sudo apt install python3-pip -y
   script:
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/test-image:$IMAGE_TAG .
-    - docker run ${DOCKERHUB_REPO_PREFIX}/test-image:$IMAGE_TAG pytest
+    #- pip install -r requirements.txt  # il faut utiliser le test deja present dans le github # 
+    - cd users
+    - pip install -r requirement.txt
+    - cd test
+    - python3 -m unittest
 
 # Stage de Build
 build:
