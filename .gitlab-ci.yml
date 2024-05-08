@@ -1,0 +1,74 @@
+stages:
+  - test
+  - build
+  - deploy_dev
+  - deploy_qa
+  - deploy_staging
+  - deploy_prod
+
+variables:
+  DOCKERHUB_REPO_PREFIX: "baranbartu"
+  IMAGE_TAG: $CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+
+# Stage de Test
+test:
+  stage: test
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  script:
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/test-image:$IMAGE_TAG .
+    - docker run ${DOCKERHUB_REPO_PREFIX}/test-image:$IMAGE_TAG pytest
+
+# Stage de Build
+build:
+  stage: build
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  script:
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG gateway/
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG users/
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG orders/
+    - docker push ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG
+    - docker push ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG
+    - docker push ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG
+
+# Template de déploiement Helm
+.deploy_template: &deploy_template
+  stage: deploy
+  image: dtzar/helm-kubectl
+  script:
+    - helm upgrade --install ${CI_PROJECT_NAME}-${KUBE_NAMESPACE} ./gitlab_helm
+      --namespace $KUBE_NAMESPACE
+      --set gateway.image=$DOCKERHUB_REPO_PREFIX/gateway:$IMAGE_TAG
+      --set users.image=$DOCKERHUB_REPO_PREFIX/users:$IMAGE_TAG
+      --set orders.image=$DOCKERHUB_REPO_PREFIX/orders:$IMAGE_TAG
+      --set global.imagePullSecrets=dockerhub
+
+deploy_dev:
+  <<: *deploy_template
+  stage: deploy_dev
+  variables:
+    KUBE_NAMESPACE: dev
+
+deploy_qa:
+  <<: *deploy_template
+  stage: deploy_qa
+  variables:
+    KUBE_NAMESPACE: qa
+
+deploy_staging:
+  <<: *deploy_template
+  stage: deploy_staging
+  variables:
+    KUBE_NAMESPACE: staging
+
+deploy_prod:
+  <<: *deploy_template
+  stage: deploy_prod
+  variables:
+    KUBE_NAMESPACE: prod
+  when: manual
+  only:
+    - main
