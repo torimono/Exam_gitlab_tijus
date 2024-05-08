@@ -1,7 +1,7 @@
 gateway:
   replicaCount: 1
   image:
-    repository: baranbartu/k-api-gateway
+    repository: tijusjason/gateway
     tag: latest
     pullPolicy: IfNotPresent
   service:
@@ -12,7 +12,7 @@ gateway:
 users:
   replicaCount: 1
   image:
-    repository: baranbartu/k-users
+    repository: tijusjason/users
     tag: latest
     pullPolicy: IfNotPresent
   service:
@@ -23,7 +23,7 @@ users:
 orders:
   replicaCount: 1
   image:
-    repository: baranbartu/k-orders
+    repository: tijusjason/orders
     tag: latest
     pullPolicy: IfNotPresent
   service:
