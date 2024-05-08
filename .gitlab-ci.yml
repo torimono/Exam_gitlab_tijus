@@ -23,7 +23,7 @@ test:
   script:
     #- pip install -r requirements.txt  # il faut utiliser le test deja present dans le github # 
     - cd users
-    - pip install -r requirement.txt
+    - pip install -r requirements.txt
     - cd test
     - python3 -m unittest
 
