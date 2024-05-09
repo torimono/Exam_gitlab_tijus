@@ -43,13 +43,17 @@ build:
 .deploy_template: &deploy_template
   stage: deploy
   image: dtzar/helm-kubectl
+  before_script:
+    - echo "$KUBE_CONFIG" | base64 -d > /tmp/kubeconfig
+    - export KUBECONFIG=/tmp/kubeconfig
   script:
     - helm upgrade --install ${CI_PROJECT_NAME}-${KUBE_NAMESPACE} ./gitlab_helm
       --namespace $KUBE_NAMESPACE
       --set gateway.image=$DOCKERHUB_REPO_PREFIX/gateway:$IMAGE_TAG
-      --set users.image=$DOCKERHUB_REPO_PREFIX/users:$IMAGE_TAG
+      --set users.image=$DOCKERHUB_REPO_PREFIX/users:$_IMAGE_TAG
       --set orders.image=$DOCKERHUB_REPO_PREFIX/orders:$IMAGE_TAG
       --set global.imagePullSecrets=dockerhub
+
 
 deploy_dev:
   <<: *deploy_template
