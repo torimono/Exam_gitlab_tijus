@@ -30,9 +30,6 @@ test:
 # Stage de Build
 build:
   stage: build
-  image: docker:19.03.12
-  services:
-    - docker:19.03.12-dind
   script:
     - docker build -t ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG ./gateway/
     - docker build -t ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG ./users/
