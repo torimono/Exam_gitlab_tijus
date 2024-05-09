@@ -31,11 +31,12 @@ test:
 build:
   stage: build
   script:
+    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin  # Log in to Docker Hub
     - docker build -t ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG ./gateway/
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG ./users/
-    - docker build -t ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG ./orders/
     - docker push ${DOCKERHUB_REPO_PREFIX}/gateway:$IMAGE_TAG
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG ./users/
     - docker push ${DOCKERHUB_REPO_PREFIX}/users:$IMAGE_TAG
+    - docker build -t ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG ./orders/
     - docker push ${DOCKERHUB_REPO_PREFIX}/orders:$IMAGE_TAG
 
 # Template de déploiement Helm
