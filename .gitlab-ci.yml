@@ -44,8 +44,7 @@ build:
   image: dtzar/helm-kubectl
   script:
   - export KUBECONFIG=$KUBE_CONFIG
-  - >
-    helm upgrade --install ${CI_PROJECT_NAME}-${KUBE_NAMESPACE} ./gitlab_helm --namespace $KUBE_NAMESPACE \
+  - helm upgrade --install ${CI_PROJECT_NAME}-${KUBE_NAMESPACE} ./gitlab_helm --namespace $KUBE_NAMESPACE \
     --set gateway.image.repository=$DOCKERHUB_REPO_PREFIX/gateway \
     --set gateway.image.tag=$IMAGE_TAG \
     --set users.image.repository=$DOCKERHUB_REPO_PREFIX/users \
@@ -53,6 +52,7 @@ build:
     --set orders.image.repository=$DOCKERHUB_REPO_PREFIX/orders \
     --set orders.image.tag=$IMAGE_TAG \
     --set imagePullSecrets[0].name=regcred
+
 
 deploy_dev:
   <<: *deploy_template
