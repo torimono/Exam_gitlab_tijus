@@ -26,7 +26,6 @@ test:
     - cd tests
     - python3 -m unittest
 
-
 # Stage de Build
 build:
   stage: build
@@ -44,13 +43,13 @@ build:
   stage: deploy
   image: dtzar/helm-kubectl
   script:
+    - export KUBECONFIG=$KUBE_CONFIG
     - helm upgrade --install ${CI_PROJECT_NAME}-${KUBE_NAMESPACE} ./gitlab_helm
       --namespace $KUBE_NAMESPACE
       --set gateway.image=$DOCKERHUB_REPO_PREFIX/gateway:$IMAGE_TAG
       --set users.image=$DOCKERHUB_REPO_PREFIX/users:$IMAGE_TAG
       --set orders.image=$DOCKERHUB_REPO_PREFIX/orders:$IMAGE_TAG
       --set imagePullSecrets[0].name=regcred
-      #--set global.imagePullSecrets=dockerhub
 
 deploy_dev:
   <<: *deploy_template
@@ -78,3 +77,4 @@ deploy_prod:
   when: manual
   only:
     - main
+
